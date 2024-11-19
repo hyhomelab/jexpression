@@ -149,6 +149,7 @@ public class Ast {
             case "&&" -> new AndExpression(leftExp, rightExp);
             case "/" -> new DivExpression(leftExp, rightExp);
             case "==" -> new EqExpression(leftExp, rightExp);
+            case "!=" -> new NotEqExpression(leftExp, rightExp);
             case ">=" -> new GeExpression(leftExp, rightExp);
             case ">" -> new GtExpression(leftExp, rightExp);
             case "in" -> new InExpression(leftExp, rightExp);

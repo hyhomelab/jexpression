@@ -4,6 +4,7 @@ import com.hyhomelab.jexpression.ast.Ast;
 import com.hyhomelab.jexpression.expression.Context;
 import com.hyhomelab.jexpression.expression.Expression;
 import com.hyhomelab.jexpression.expression.nontermial.function.Func;
+import com.hyhomelab.jexpression.expression.nontermial.function.Not;
 import com.hyhomelab.jexpression.expression.nontermial.function.Sum;
 import com.hyhomelab.jexpression.scanner.Scanner;
 import com.hyhomelab.jexpression.utils.WeakCache;
@@ -22,7 +23,10 @@ public class Runtime {
     }
 
     private void loadBaseFunc() {
+        // math
         this.addFunc(new Sum());
+        // logic
+        this.addFunc(new Not());
     }
 
     public void addFunc(Func func) {

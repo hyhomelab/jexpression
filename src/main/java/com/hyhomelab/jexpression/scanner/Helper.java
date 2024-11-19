@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Helper {
     public static boolean isAllowString(char c) {
-        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_' || (c >= '\u4E00' && c <= '\u9FFF');
+        return Character.isLetter(c) || c == '_';
     }
 
     public static boolean isNumber(char data) {
@@ -12,11 +12,11 @@ public class Helper {
     }
 
     public static boolean isNumberWithZero(char data) {
-        return (data >= '0' && data <= '9');
+        return Character.isDigit(data);
     }
 
     public static boolean isOp(char data) {
-        return List.of('+','-', '*', '/', '>', '<', '|', '&', '=').contains(data);
+        return List.of('+','-', '*', '/', '>', '<', '|', '&', '=', '!').contains(data);
     }
 
     public static boolean isComma(char data) {
