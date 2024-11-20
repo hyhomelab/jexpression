@@ -1,6 +1,7 @@
 package com.hyhomelab.jexpression.ast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
@@ -51,7 +52,8 @@ public class AstStack<T> {
         while(stack != null && !stack.isEmpty()){
             result.add(stack.pop());
         }
-        return result.reversed();
+        Collections.reverse(result);
+        return result;
     }
 
 }

@@ -14,7 +14,7 @@ public class UnidentifiedOpMinus extends AbsTransfer{
         if(Helper.isBlankSpace(data)){
             return new Transferable(data, new TransferNext(State.BLANK_SPACE, State.OP));
         }else if(Helper.isNumberWithZero(data)){
-            var lastToken = ctx.getTokens().getLast();
+            var lastToken = ctx.getTokens().get(ctx.getTokens().size() - 1);
             // 根据上个 token 判断这里的负号
             if(List.of(TokenType.OP.value(),
                     TokenType.COMMA.value(),

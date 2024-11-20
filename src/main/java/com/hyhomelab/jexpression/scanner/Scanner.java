@@ -97,7 +97,7 @@ public class Scanner {
     }
 
     private void throwException(Exception e, String expression, char c, int startPos, int endPos) {
-        var spaceBuilder = new StringBuilder().repeat(' ', startPos).append('^');
+        String spaceBuilder = " ".repeat(Math.max(0, startPos)) + '^';
         throw new ScannerException(String.format("%s \nchar '%s' at pos:(%d, %d) is invalid! \n%s \n%s",e, c, startPos, endPos, expression, spaceBuilder));
     }
 
