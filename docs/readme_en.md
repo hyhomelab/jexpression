@@ -1,7 +1,7 @@
 ## jexpression
 A simple Java custom expression evaluator.
 
-[中文](../README.md) | [英文](./readme_en.md)
+[中文](../README.md) | [English](./readme_en.md)
 
 ### Description
 

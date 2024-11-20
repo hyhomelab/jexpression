@@ -15,6 +15,8 @@ public class Comma extends AbsTransfer{
             return new Transferable(data, State.UNIDENTIFIED_STR);
         }else if(Helper.isOpMinus(data)){
             return new Transferable(data, State.NUMBER);
+        }else if(Helper.isLeftBracket(data)){
+            return new Transferable(data, State.LEFT_BRACKET);
         }
         return null;
     }

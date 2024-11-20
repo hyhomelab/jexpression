@@ -147,6 +147,7 @@ public class Ast {
     private Expression buildOpExpression(Token opToken, Expression leftExp, Expression rightExp) {
         return switch (opToken.data()){
             case "&&" -> new AndExpression(leftExp, rightExp);
+            case "||" -> new OrExpression(leftExp, rightExp);
             case "/" -> new DivExpression(leftExp, rightExp);
             case "==" -> new EqExpression(leftExp, rightExp);
             case "!=" -> new NotEqExpression(leftExp, rightExp);
