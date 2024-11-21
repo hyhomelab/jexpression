@@ -1,7 +1,9 @@
 package com.hyhomelab.jexpression.runtime;
 
 import com.hyhomelab.jexpression.expression.Context;
+import com.hyhomelab.jexpression.expression.nontermial.function.IfElse;
 import com.hyhomelab.jexpression.expression.nontermial.function.StringRepeat;
+import com.hyhomelab.jexpression.expression.nontermial.function.Sum;
 import junit.framework.TestCase;
 
 import java.math.BigDecimal;
@@ -74,6 +76,17 @@ public class RuntimeTest extends TestCase {
         assertEquals("abc111", result.toString());
     }
 
+    public void testExecuteFunc() {
+        String exp = "ifElse(sum(1,2) == 3, stringRepeat('a',3), stringRepeat('b',3))";
+        var runtime = new Runtime();
+        runtime.addFunc(new Sum());
+        runtime.addFunc(new StringRepeat());
+        runtime.addFunc(new IfElse());
+
+        var result = runtime.execute(exp);
+        assertEquals("aaa", result.toString());
+    }
+
     public void testExecuteChineseVar() {
         // 佣金=订单金额*20%+路费
         String exp = "订单金额*0.2 + 路费";
@@ -84,5 +97,21 @@ public class RuntimeTest extends TestCase {
         ctx.setVar("路费", 123.2);
         var result = runtime.execute(ctx, exp);
         assertEquals(200.1*0.2+123.2, result.toDouble());
+    }
+
+    public void testExecuteBracketNest() {
+        String exp = "((1+2)*(3-4))";
+        var runtime = new Runtime();
+
+        var result = runtime.execute(exp);
+        assertEquals(-3, result.toInt());
+
+        exp = "sum(1+1, 2+2, 3+3)";
+        result = runtime.execute(exp);
+        assertEquals(12, result.toInt());
+
+        exp = "(1)";
+        result = runtime.execute(exp);
+        assertEquals(1, result.toInt());
     }
 }

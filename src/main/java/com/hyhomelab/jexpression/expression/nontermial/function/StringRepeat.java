@@ -11,8 +11,8 @@ public class StringRepeat implements Func{
 
     @Override
     public Object call(Context ctx, Object... args) {
-        var str = ArgsUtils.getArg(args, 0).toString();
-        var repeatTimes = ArgsUtils.getArg(args, 1).toInt();
+        var str = ArgsUtils.getArg(ctx, args, 0).toString();
+        var repeatTimes = ArgsUtils.getArg(ctx, args, 1).toInt();
         return String.valueOf(str).repeat(repeatTimes);
     }
 

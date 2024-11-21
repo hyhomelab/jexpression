@@ -11,6 +11,8 @@ public class RightBracket extends AbsTransfer{
             return new Transferable(data, State.OP_KEY_WORD);
         }else if(Helper.isOp(data)){
             return new Transferable(data, State.OP);
+        }else if(Helper.isRightBracket(data)){
+            return new Transferable(data, State.RIGHT_BRACKET);
         }
         return null;
     }

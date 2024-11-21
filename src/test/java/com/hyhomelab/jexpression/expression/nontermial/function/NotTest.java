@@ -1,7 +1,5 @@
 package com.hyhomelab.jexpression.expression.nontermial.function;
 
-import com.hyhomelab.jexpression.expression.Context;
-import com.hyhomelab.jexpression.expression.Expression;
 import junit.framework.TestCase;
 
 public class NotTest extends TestCase {
@@ -10,5 +8,8 @@ public class NotTest extends TestCase {
         Func f = new Not();
         var result = f.call(null, false);
         assertEquals(true, result);
+
+        result = f.call(null, true);
+        assertEquals(false, result);
     }
 }

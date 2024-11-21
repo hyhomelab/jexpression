@@ -69,13 +69,19 @@ public class Scanner {
                 if ( lastState != next.getNext()){
 
                     if(lastState != State.BLANK_SPACE
-                            && lastState != State.COMMA
                             && lastState != State.STR_START
                             && lastState != State.STR_END){
                         // 添加到 tokens 里
                         tokens.add(this.buildToken(lastState, currentData.toString(), startPos, currentPos));
                     }
 
+                    // 状态转移后处理
+                    currentData = new StringBuilder();
+                    startPos = currentPos;
+                }else if(lastState == next.getNext() && List.of(State.LEFT_BRACKET, State.RIGHT_BRACKET).contains(next.getNext())){
+                    // 特殊处理括号嵌套
+                    // 添加到 tokens 里
+                    tokens.add(this.buildToken(lastState, currentData.toString(), startPos, currentPos));
                     // 状态转移后处理
                     currentData = new StringBuilder();
                     startPos = currentPos;
@@ -111,7 +117,7 @@ public class Scanner {
             case RIGHT_BRACKET -> TokenType.RIGHT_BRACKET;
             case DECIMAL -> TokenType.DECIMAL;
             case FUNC -> TokenType.FUNC;
-//            case COMMA -> TokenType.COMMA;
+            case COMMA -> TokenType.COMMA;
             case STR, STR_END -> TokenType.STRING;
             case VAR -> TokenType.VAR;
             case END -> TokenType.END;

@@ -2,6 +2,7 @@ package com.hyhomelab.jexpression.expression;
 
 import com.hyhomelab.jexpression.expression.nontermial.function.Func;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +28,10 @@ public class Context {
     }
 
     public void setVar(String name, Object value) {
+        // 数值全部包装成 BigDecimal
+        if (value instanceof Number && !(value instanceof BigDecimal)) {
+            value = new BigDecimal(value.toString());
+        }
         this.variables.put(name, value);
     }
 }

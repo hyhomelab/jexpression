@@ -11,7 +11,7 @@ public class Not implements Func{
 
     @Override
     public Object call(Context ctx, Object... args) {
-        boolean arg = ArgsUtils.getArg(args, 0).toBoolean();
+        boolean arg = ArgsUtils.getArg(ctx, args, 0).toBoolean();
         return !arg;
     }
 

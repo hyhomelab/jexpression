@@ -1,3 +1,4 @@
+
 package com.hyhomelab.jexpression.scanner;
 
 public class LeftBracket extends AbsTransfer{

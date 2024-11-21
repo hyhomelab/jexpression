@@ -22,22 +22,30 @@ public class AstStack<T> {
     }
 
     public T pop() {
-        return this.containerStack.peek().pop();
+        var deepStack = this.containerStack.peek();
+        if (deepStack.isEmpty()) {
+            return null;
+        }
+        return deepStack.pop();
     }
 
     public T peek() {
-        return this.containerStack.peek().peek();
+        var deepStack = this.containerStack.peek();
+        if (deepStack.isEmpty()) {
+            return null;
+        }
+        return deepStack.peek();
     }
 
     public boolean isEmpty() {
         return this.containerStack.peek().isEmpty();
     }
 
-    public boolean isFuncStack(){
+    public boolean isInDeep(){
         return this.containerStack.size() > 1;
     }
 
-    public void enterFuncStack(){
+    public void deepStack(){
         this.containerStack.push(new Stack<>());
     }
 
@@ -46,7 +54,10 @@ public class AstStack<T> {
      * @return 参数，按正常顺序排列
      */
 
-    public List<T> exitFuncStack(){
+    public List<T> leaveStack(){
+        if(this.containerStack.size() == 1){
+            throw new IllegalStateException("can not leave stack after stack is empty");
+        }
         var stack = this.containerStack.pop();
         List<T> result = new ArrayList<>();
         while(stack != null && !stack.isEmpty()){

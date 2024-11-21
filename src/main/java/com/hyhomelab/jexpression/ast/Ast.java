@@ -13,12 +13,11 @@ import com.hyhomelab.jexpression.token.TokenType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
 public class Ast {
 
     private final Map<String, Integer> opLevelMap = new HashMap<>();
-    private Stack<Token> opTokenStack = new Stack<>(); // 符号栈
+    private AstStack<Token> opTokenStack = new AstStack<>(); // 符号栈
     private AstStack<Expression> expStack = new AstStack<>(); // 表达式栈
 
     public Ast(){
@@ -79,27 +78,38 @@ public class Ast {
                 this.expStack.push(exp);
             }else if(TokenType.FUNC == token.tokenType()) {
                 this.opTokenStack.push(token);
-                // 开辟方法表达式栈
-                this.expStack.enterFuncStack();
             }else if(token.tokenType() == TokenType.LEFT_BRACKET) {
-                this.opTokenStack.push(token);
-            }else if(token.tokenType() == TokenType.RIGHT_BRACKET){
+                // 开辟新栈
+                this.expStack.deepStack();
+                this.opTokenStack.deepStack();
+            }else if(token.tokenType() == TokenType.RIGHT_BRACKET) {
                 // 处理右括号(不加入 opStack)
-                // 判断当前是纯提升优先级，还是方法参数
-                if(this.expStack.isFuncStack()){
-                    this.opTokenStack.pop(); // 抛掉左括号
-                    // 方法
-                    Token funcToken = this.opTokenStack.pop();
-                    // 退出方法表达式栈，提取参数
-                    List<Expression> args = expStack.exitFuncStack();
-                    Expression funcExp = this.buildFuncExpression(funcToken, args);
-                    this.expStack.push(funcExp);
-                }else{
-                    // 纯提升优先级
-                    // 弹出 op 构建表达式，直到遇到左括号
-                    buildExpression();
+                // 构建括号里的表达式
+                buildExpression();
+                if(this.opTokenStack.isInDeep()){
+                    //
+                    this.opTokenStack.leaveStack();
                 }
-            }else if(token.tokenType() == TokenType.OP || token.tokenType() == TokenType.KEY_WORD){
+                if(this.opTokenStack.peek() != null){
+                     if(TokenType.FUNC == this.opTokenStack.peek().tokenType()){
+
+                         // 括号里是方法参数
+                         Token funcToken = this.opTokenStack.pop();
+                         // 退出方法表达式栈，提取参数
+                         List<Expression> args = expStack.leaveStack();
+                         Expression funcExp = this.buildFuncExpression(funcToken, args);
+                         this.expStack.push(funcExp);
+                         continue;
+                     }
+                }
+                // 如果不是方法调用，就是优先级，里面只可能剩下一个节点
+                if(!this.expStack.isEmpty()){
+                    var exp = this.expStack.pop();
+                    this.expStack.leaveStack();
+                    this.expStack.push(exp);
+                }
+
+            }else if(List.of(TokenType.OP ,TokenType.KEY_WORD, TokenType.COMMA).contains(token.tokenType())){
                 // 处理 KeyWord，Op，
                 if(this.opTokenStack.isEmpty()){
                     this.opTokenStack.push(token);
@@ -107,6 +117,9 @@ public class Ast {
                     while(!this.opTokenStack.isEmpty() && !this.canPushToOpStack(token, this.opTokenStack.peek())){
                         // 优先级低的，弹出符号栈里的操作符，构建表达式
                         Token opToken = this.opTokenStack.pop();
+                        if(TokenType.COMMA == opToken.tokenType()){
+                            break;
+                        }
                         Expression rightExp = this.expStack.pop(); // 先弹出的是运算符右边的表达式
                         Expression leftExp = this.expStack.pop();
                         Expression buildExp = this.buildOpExpression(opToken, leftExp, rightExp);
@@ -129,18 +142,17 @@ public class Ast {
     private void buildExpression() {
         while(!this.opTokenStack.isEmpty()){
             Token opToken = this.opTokenStack.pop();
-            if(TokenType.LEFT_BRACKET == opToken.tokenType()){
-                break;
+            if(TokenType. OP == opToken.tokenType()) {
+                // op
+                Expression rightExp = this.expStack.pop(); // 先弹出的是运算符右边的表达式
+                Expression leftExp = this.expStack.pop();
+                Expression buildExp = this.buildOpExpression(opToken, leftExp, rightExp);
+                this.expStack.push(buildExp);
+            }else if(TokenType.COMMA == opToken.tokenType()){
+                continue;
+            }else{
+                throw new InvalidParameterException("token type not supported");
             }
-            if(TokenType.FUNC == opToken.tokenType()){
-                // 只剩下一个 func 节点，根节点就是它了
-                break;
-            }
-            Expression rightExp = this.expStack.pop(); // 先弹出的是运算符右边的表达式
-            Expression leftExp = this.expStack.pop();
-            Expression buildExp = this.buildOpExpression(opToken, leftExp, rightExp);
-            this.expStack.push(buildExp);
-
         }
     }
 

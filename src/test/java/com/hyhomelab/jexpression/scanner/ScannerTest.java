@@ -1,6 +1,7 @@
 package com.hyhomelab.jexpression.scanner;
 
-import com.hyhomelab.jexpression.token.*;
+import com.hyhomelab.jexpression.token.Token;
+import com.hyhomelab.jexpression.token.TokenType;
 import junit.framework.TestCase;
 
 import java.util.List;
@@ -62,7 +63,9 @@ public class ScannerTest extends TestCase {
                 new Token(TokenType.FUNC, "sum", 0, 3),
                 new Token(TokenType.LEFT_BRACKET, "(", 3,4),
                 new Token(TokenType.NUMBER, "1", 4, 5),
+                new Token(TokenType.COMMA, ",", 5, 6),
                 new Token(TokenType.NUMBER,"2", 6, 7),
+                new Token(TokenType.COMMA,",", 7, 8),
                 new Token(TokenType.NUMBER,"3", 8, 9),
                 new Token(TokenType.RIGHT_BRACKET,")", 9, 10),
                 new Token(TokenType.OP,"+", 10, 11),
