@@ -1,11 +1,12 @@
 package com.hyhomelab.jexpression.expression.nontermial.function;
 
-import com.hyhomelab.jexpression.expression.Context;
 import com.hyhomelab.jexpression.expression.nontermial.FuncExpression;
 import com.hyhomelab.jexpression.expression.nontermial.GeExpression;
 import com.hyhomelab.jexpression.expression.terminal.NumberExpression;
 import com.hyhomelab.jexpression.expression.terminal.StringExpression;
 import com.hyhomelab.jexpression.expression.terminal.VarExpression;
+import com.hyhomelab.jexpression.functions.base.IfElse;
+import com.hyhomelab.jexpression.runtime.RuntimeContext;
 import junit.framework.TestCase;
 
 /**
@@ -17,8 +18,8 @@ public class IfElseTest extends TestCase {
 
     public void testCall() {
         var func = new IfElse();
-        var ctx = new Context();
-        ctx.addFunc(func);
+        var ctx = new RuntimeContext();
+        ctx.setFuncFinder(funcName -> func);
         var funcExp = new FuncExpression("ifElse",
                 new GeExpression(
                         new VarExpression("age"),

@@ -1,8 +1,9 @@
-package com.hyhomelab.jexpression.expression.nontermial.function;
+package com.hyhomelab.jexpression.functions.math;
 
 import com.hyhomelab.jexpression.exception.InvalidParameterException;
 import com.hyhomelab.jexpression.expression.Context;
 import com.hyhomelab.jexpression.expression.Expression;
+import com.hyhomelab.jexpression.expression.nontermial.function.Func;
 
 import java.math.BigDecimal;
 

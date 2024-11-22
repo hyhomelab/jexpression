@@ -1,9 +1,8 @@
 package com.hyhomelab.jexpression.runtime;
 
-import com.hyhomelab.jexpression.expression.Context;
-import com.hyhomelab.jexpression.expression.nontermial.function.IfElse;
-import com.hyhomelab.jexpression.expression.nontermial.function.StringRepeat;
-import com.hyhomelab.jexpression.expression.nontermial.function.Sum;
+import com.hyhomelab.jexpression.functions.base.IfElse;
+import com.hyhomelab.jexpression.functions.math.Sum;
+import com.hyhomelab.jexpression.functions.str.StringRepeat;
 import junit.framework.TestCase;
 
 import java.math.BigDecimal;
@@ -92,7 +91,7 @@ public class RuntimeTest extends TestCase {
         String exp = "订单金额*0.2 + 路费";
         var runtime = new Runtime();
         runtime.addFunc(new StringRepeat());
-        var ctx = new Context();
+        var ctx = new RuntimeContext();
         ctx.setVar("订单金额", 200.1);
         ctx.setVar("路费", 123.2);
         var result = runtime.execute(ctx, exp);

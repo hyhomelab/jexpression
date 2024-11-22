@@ -1,9 +1,10 @@
-package com.hyhomelab.jexpression.expression.nontermial.function;
+package com.hyhomelab.jexpression.functions.base;
 
 import com.hyhomelab.jexpression.expression.Context;
+import com.hyhomelab.jexpression.expression.nontermial.function.Func;
 import com.hyhomelab.jexpression.utils.ArgsUtils;
 
-public class Not implements Func{
+public class Not implements Func {
     @Override
     public String getName() {
         return "not";

@@ -1,6 +1,7 @@
-package com.hyhomelab.jexpression.expression.nontermial.function;
+package com.hyhomelab.jexpression.functions.base;
 
 import com.hyhomelab.jexpression.expression.Context;
+import com.hyhomelab.jexpression.expression.nontermial.function.Func;
 import com.hyhomelab.jexpression.utils.ArgsUtils;
 
 /**
@@ -8,7 +9,7 @@ import com.hyhomelab.jexpression.utils.ArgsUtils;
  * @email hyhomelab@hotmail.com
  * @date 2024/11/21 11:06
  */
-public class IfElse implements Func{
+public class IfElse implements Func {
     @Override
     public String getName() {
         return "ifElse";

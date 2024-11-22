@@ -1,13 +1,13 @@
 package com.hyhomelab.jexpression.ast;
 
-import com.hyhomelab.jexpression.expression.Context;
 import com.hyhomelab.jexpression.expression.Expression;
 import com.hyhomelab.jexpression.expression.nontermial.FuncExpression;
 import com.hyhomelab.jexpression.expression.nontermial.MultiExpression;
 import com.hyhomelab.jexpression.expression.nontermial.PlusExpression;
 import com.hyhomelab.jexpression.expression.nontermial.SubExpression;
-import com.hyhomelab.jexpression.expression.nontermial.function.Sum;
 import com.hyhomelab.jexpression.expression.terminal.NumberExpression;
+import com.hyhomelab.jexpression.functions.math.Sum;
+import com.hyhomelab.jexpression.runtime.RuntimeContext;
 import com.hyhomelab.jexpression.token.Token;
 import com.hyhomelab.jexpression.token.TokenType;
 import junit.framework.TestCase;
@@ -54,8 +54,8 @@ public class AstTest extends TestCase {
         Expression expectRoot = new FuncExpression("sum", new NumberExpression("1"), new NumberExpression("2"), new NumberExpression("3"));
         assertEquals(expectRoot, root);
         // calc
-        var ctx = new Context();
-        ctx.addFunc(new Sum());
+        var ctx = new RuntimeContext();
+        ctx.setFuncFinder(funcName -> new Sum());
         var result = root.interpret(ctx);
         assertEquals(new BigDecimal(6), result);
     }
@@ -83,7 +83,7 @@ public class AstTest extends TestCase {
                     ),new NumberExpression("4")));
         assertEquals(expectRoot, root);
         // 计算结果
-        var result = root.interpret(new Context());
+        var result = root.interpret(new RuntimeContext());
         assertEquals(new BigDecimal( -3), result);
     }
 }

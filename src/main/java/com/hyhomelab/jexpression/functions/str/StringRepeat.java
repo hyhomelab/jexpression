@@ -1,9 +1,10 @@
-package com.hyhomelab.jexpression.expression.nontermial.function;
+package com.hyhomelab.jexpression.functions.str;
 
 import com.hyhomelab.jexpression.expression.Context;
+import com.hyhomelab.jexpression.expression.nontermial.function.Func;
 import com.hyhomelab.jexpression.utils.ArgsUtils;
 
-public class StringRepeat implements Func{
+public class StringRepeat implements Func {
     @Override
     public String getName() {
         return "stringRepeat";

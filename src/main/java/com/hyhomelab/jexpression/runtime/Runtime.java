@@ -1,47 +1,65 @@
 package com.hyhomelab.jexpression.runtime;
 
 import com.hyhomelab.jexpression.ast.Ast;
+import com.hyhomelab.jexpression.exception.FunctionNotFoundException;
 import com.hyhomelab.jexpression.expression.Context;
 import com.hyhomelab.jexpression.expression.Expression;
 import com.hyhomelab.jexpression.expression.nontermial.function.Func;
-import com.hyhomelab.jexpression.expression.nontermial.function.Not;
-import com.hyhomelab.jexpression.expression.nontermial.function.Sum;
+import com.hyhomelab.jexpression.expression.nontermial.function.Library;
+import com.hyhomelab.jexpression.functions.FuncLibraryLoader;
 import com.hyhomelab.jexpression.scanner.Scanner;
 import com.hyhomelab.jexpression.utils.WeakCache;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Runtime {
 
-    private final Map<String, Func> funcMap = new HashMap<String, Func>();
+    private final List<Library> funcLibrary = new ArrayList<>();
     private final WeakCache<Expression> cache = new WeakCache<>(10);
+
+    public final static String CUSTOM_LIBRARY_NAME = "custom";
 
 
     public Runtime() {
-        this.loadBaseFunc();
+        this.loadDefaultLibraries();
     }
 
-    private void loadBaseFunc() {
-        // math
-        this.addFunc(new Sum());
-        // logic
-        this.addFunc(new Not());
+    private void loadDefaultLibraries() {
+        this.loadLibrary(new Library(CUSTOM_LIBRARY_NAME));
+        this.loadLibrary(FuncLibraryLoader.loadDefaultLibraries());
+    }
+
+    private void loadLibrary(Library... libraries) {
+        if (libraries != null) {
+            this.funcLibrary.addAll(Arrays.asList(libraries));
+        }
+    }
+
+    private Library getCustomLibrary() {
+        for (Library library : funcLibrary) {
+            if (library.getName().equals(CUSTOM_LIBRARY_NAME)) {
+                return library;
+            }
+        }
+        throw new RuntimeException("Custom library not found");
     }
 
     public void addFunc(Func func) {
-        this.funcMap.put(func.getName(), func);
+        var customLib = this.getCustomLibrary();
+        customLib.loadFunction(func);
     }
 
     public Object executeObject(String expression) {
-        return this.execute0(new Context(), expression);
+        return this.execute0(new RuntimeContext(), expression);
     }
     public Object executeObject(Context ctx, String expression) {
         return this.execute0(ctx, expression);
     }
 
     public Result execute(String expression) {
-        var result = this.execute0(new Context(), expression);
+        var result = this.execute0(new RuntimeContext(), expression);
         return new Result(result);
     }
 
@@ -51,8 +69,17 @@ public class Runtime {
     }
 
     private Object execute0(Context ctx, String expression) {
-        // 加载方法库
-        ctx.setFuncMap(this.funcMap);
+        // 加载方法
+        var rtCtx = new RuntimeContext(ctx);
+        rtCtx.setFuncFinder(funcName -> {
+            for (Library library : funcLibrary) {
+                var func = library.getFunction(funcName);
+                if (func != null) {
+                    return func;
+                }
+            }
+            throw new FunctionNotFoundException(String.format("Function [%s] not found", funcName));
+        });
 
         var rootExp = this.cache.get(expression);
         if (rootExp == null) {
@@ -66,7 +93,7 @@ public class Runtime {
             this.cache.put(expression, rootExp);
         }
         // exec
-        return rootExp.interpret(ctx);
+        return rootExp.interpret(rtCtx);
     }
 
 

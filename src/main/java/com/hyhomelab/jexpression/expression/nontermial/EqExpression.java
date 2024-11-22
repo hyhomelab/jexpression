@@ -4,6 +4,7 @@ import com.hyhomelab.jexpression.expression.Context;
 import com.hyhomelab.jexpression.expression.Expression;
 import com.hyhomelab.jexpression.expression.Nonterminal;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 public class EqExpression extends Nonterminal {
@@ -21,6 +22,9 @@ public class EqExpression extends Nonterminal {
     public Object interpret(Context ctx) {
         var leftResult = left.interpret(ctx);
         var rightResult = right.interpret(ctx);
+        if(leftResult instanceof BigDecimal && rightResult instanceof BigDecimal) {
+            return ((BigDecimal) leftResult).compareTo((BigDecimal) rightResult) == 0;
+        }
         return leftResult.equals(rightResult);
     }
 

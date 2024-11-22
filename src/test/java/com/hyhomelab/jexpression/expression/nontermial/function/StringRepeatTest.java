@@ -1,5 +1,6 @@
 package com.hyhomelab.jexpression.expression.nontermial.function;
 
+import com.hyhomelab.jexpression.functions.str.StringRepeat;
 import junit.framework.TestCase;
 
 public class StringRepeatTest extends TestCase {

@@ -5,6 +5,7 @@ import com.hyhomelab.jexpression.expression.Expression;
 import com.hyhomelab.jexpression.expression.ExpressionType;
 import com.hyhomelab.jexpression.expression.terminal.NumberExpression;
 import com.hyhomelab.jexpression.expression.terminal.StringExpression;
+import com.hyhomelab.jexpression.runtime.RuntimeContext;
 import junit.framework.TestCase;
 
 import java.math.BigDecimal;
@@ -23,7 +24,7 @@ public class InExpressionTest extends TestCase {
                 return null;
             }
         });
-        var result = in.interpret(new Context());
+        var result = in.interpret(new RuntimeContext());
         assertEquals(true, result);
     }
 
@@ -39,7 +40,7 @@ public class InExpressionTest extends TestCase {
                 return null;
             }
         });
-        var result = in.interpret(new Context());
+        var result = in.interpret(new RuntimeContext());
         assertEquals(true, result);
     }
 }
