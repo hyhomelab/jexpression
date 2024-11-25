@@ -4,6 +4,7 @@ import com.hyhomelab.jexpression.expression.nontermial.function.Library;
 import com.hyhomelab.jexpression.functions.base.Choose;
 import com.hyhomelab.jexpression.functions.base.IfElse;
 import com.hyhomelab.jexpression.functions.base.Not;
+import com.hyhomelab.jexpression.functions.list.List;
 import com.hyhomelab.jexpression.functions.math.Sum;
 import com.hyhomelab.jexpression.functions.str.StringRepeat;
 
@@ -18,7 +19,8 @@ public class FuncLibraryLoader {
         return new Library[]{
                 loadBase(),
                 loadMath(),
-                loadString()
+                loadString(),
+                loadList()
         };
     }
 
@@ -28,6 +30,14 @@ public class FuncLibraryLoader {
                 new Choose(),
                 new IfElse(),
                 new Not()
+        );
+        return lib;
+    }
+
+    public static Library loadList(){
+        var lib = new Library("list");
+        lib.loadFunction(
+                new List()
         );
         return lib;
     }

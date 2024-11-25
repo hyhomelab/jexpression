@@ -142,7 +142,7 @@ public class Ast {
     private void buildExpression() {
         while(!this.opTokenStack.isEmpty()){
             Token opToken = this.opTokenStack.pop();
-            if(TokenType. OP == opToken.tokenType()) {
+            if(TokenType.OP == opToken.tokenType() || TokenType.KEY_WORD == opToken.tokenType()) {
                 // op
                 Expression rightExp = this.expStack.pop(); // 先弹出的是运算符右边的表达式
                 Expression leftExp = this.expStack.pop();
@@ -158,8 +158,8 @@ public class Ast {
 
     private Expression buildOpExpression(Token opToken, Expression leftExp, Expression rightExp) {
         return switch (opToken.data()){
-            case "&&" -> new AndExpression(leftExp, rightExp);
-            case "||" -> new OrExpression(leftExp, rightExp);
+            case "&&","and" -> new AndExpression(leftExp, rightExp);
+            case "||", "or" -> new OrExpression(leftExp, rightExp);
             case "/" -> new DivExpression(leftExp, rightExp);
             case "==" -> new EqExpression(leftExp, rightExp);
             case "!=" -> new NotEqExpression(leftExp, rightExp);

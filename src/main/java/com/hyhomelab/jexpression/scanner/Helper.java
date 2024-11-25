@@ -61,6 +61,6 @@ public class Helper {
     }
 
     public static boolean isKeyWord(String currentWord) {
-        return List.of("in").contains(currentWord);
+        return List.of("in", "and", "or").contains(currentWord);
     }
 }

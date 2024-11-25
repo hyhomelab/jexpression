@@ -113,4 +113,21 @@ public class RuntimeTest extends TestCase {
         result = runtime.execute(exp);
         assertEquals(1, result.toInt());
     }
+
+    public void testExecuteLogic() {
+        String exp = "1 < 2 && 2 < 3";
+        var runtime = new Runtime();
+
+        var result = runtime.execute(exp);
+        assertTrue(result.toBoolean());
+    }
+
+
+    public void testExecuteKeyWordIn() {
+        String exp = "1 in list(1,2,3)";
+        var runtime = new Runtime();
+
+        var result = runtime.execute(exp);
+        assertTrue(result.toBoolean());
+    }
 }
