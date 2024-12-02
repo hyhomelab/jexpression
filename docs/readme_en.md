@@ -60,9 +60,9 @@ assertFalse(result.toBoolean());
 #### Calling custom methods
 
 ```java
-String exp = "'abc' + stringRepeat('1', 3)";
+String exp = "'abc' + repeat('1', 3)";
 var runtime = new Runtime();
-runtime.addFunc(new StringRepeat());
+runtime.addFunc(new Repeat());
 
 var result = runtime.execute(exp);
 assertEquals("abc111", result.toString());

@@ -1,8 +1,8 @@
 package com.hyhomelab.jexpression.runtime;
 
-import com.hyhomelab.jexpression.functions.base.IfElse;
+import com.hyhomelab.jexpression.functions.base.IfFunc;
 import com.hyhomelab.jexpression.functions.math.Sum;
-import com.hyhomelab.jexpression.functions.str.StringRepeat;
+import com.hyhomelab.jexpression.functions.str.Repeat;
 import junit.framework.TestCase;
 
 import java.math.BigDecimal;
@@ -67,20 +67,20 @@ public class RuntimeTest extends TestCase {
     }
 
     public void testExecuteStringAndFunc() {
-        String exp = "'abc' + stringRepeat('1', 3)";
+        String exp = "'abc' + repeat('1', 3)";
         var runtime = new Runtime();
-        runtime.addFunc(new StringRepeat());
+        runtime.addFunc(new Repeat());
 
         var result = runtime.execute(exp);
         assertEquals("abc111", result.toString());
     }
 
     public void testExecuteFunc() {
-        String exp = "ifElse(sum(1,2) == 3, stringRepeat('a',3), stringRepeat('b',3))";
+        String exp = "if(sum(1,2) == 3, repeat('a',3), repeat('b',3))";
         var runtime = new Runtime();
         runtime.addFunc(new Sum());
-        runtime.addFunc(new StringRepeat());
-        runtime.addFunc(new IfElse());
+        runtime.addFunc(new Repeat());
+        runtime.addFunc(new IfFunc());
 
         var result = runtime.execute(exp);
         assertEquals("aaa", result.toString());
@@ -90,7 +90,7 @@ public class RuntimeTest extends TestCase {
         // 佣金=订单金额*20%+路费
         String exp = "订单金额*0.2 + 路费";
         var runtime = new Runtime();
-        runtime.addFunc(new StringRepeat());
+        runtime.addFunc(new Repeat());
         var ctx = new RuntimeContext();
         ctx.setVar("订单金额", 200.1);
         ctx.setVar("路费", 123.2);

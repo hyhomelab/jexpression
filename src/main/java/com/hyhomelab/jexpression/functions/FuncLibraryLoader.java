@@ -2,11 +2,11 @@ package com.hyhomelab.jexpression.functions;
 
 import com.hyhomelab.jexpression.expression.nontermial.function.Library;
 import com.hyhomelab.jexpression.functions.base.Choose;
-import com.hyhomelab.jexpression.functions.base.IfElse;
+import com.hyhomelab.jexpression.functions.base.IfFunc;
 import com.hyhomelab.jexpression.functions.base.Not;
 import com.hyhomelab.jexpression.functions.list.List;
 import com.hyhomelab.jexpression.functions.math.Sum;
-import com.hyhomelab.jexpression.functions.str.StringRepeat;
+import com.hyhomelab.jexpression.functions.str.Repeat;
 
 /**
  * @author hyhomelab
@@ -28,7 +28,7 @@ public class FuncLibraryLoader {
         var lib = new Library("base");
         lib.loadFunction(
                 new Choose(),
-                new IfElse(),
+                new IfFunc(),
                 new Not()
         );
         return lib;
@@ -53,7 +53,7 @@ public class FuncLibraryLoader {
     public static Library loadString(){
         var lib = new Library("string");
         lib.loadFunction(
-                new StringRepeat()
+                new Repeat()
         );
         return lib;
     }

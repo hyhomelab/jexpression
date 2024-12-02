@@ -9,10 +9,10 @@ import com.hyhomelab.jexpression.utils.ArgsUtils;
  * @email hyhomelab@hotmail.com
  * @date 2024/11/21 11:06
  */
-public class IfElse implements Func {
+public class IfFunc implements Func {
     @Override
     public String getName() {
-        return "ifElse";
+        return "if";
     }
 
     @Override
@@ -26,9 +26,9 @@ public class IfElse implements Func {
     @Override
     public String getDescription() {
         return """
-                if-else 方法
-                使用方法ifElse(condition, trueValue, falseValue)
-                eg: ifElse(age>=18, 'adult', 'child')
+                if 方法
+                使用方法if(condition, trueValue, falseValue)
+                eg: if(age>=18, 'adult', 'child')
                 """;
     }
 }

@@ -5,7 +5,7 @@ import com.hyhomelab.jexpression.expression.nontermial.GeExpression;
 import com.hyhomelab.jexpression.expression.terminal.NumberExpression;
 import com.hyhomelab.jexpression.expression.terminal.StringExpression;
 import com.hyhomelab.jexpression.expression.terminal.VarExpression;
-import com.hyhomelab.jexpression.functions.base.IfElse;
+import com.hyhomelab.jexpression.functions.base.IfFunc;
 import com.hyhomelab.jexpression.runtime.RuntimeContext;
 import junit.framework.TestCase;
 
@@ -14,13 +14,13 @@ import junit.framework.TestCase;
  * @email hyhomelab@hotmail.com
  * @date 2024/11/21 11:15
  */
-public class IfElseTest extends TestCase {
+public class IfFuncTest extends TestCase {
 
     public void testCall() {
-        var func = new IfElse();
+        var func = new IfFunc();
         var ctx = new RuntimeContext();
         ctx.setFuncFinder(funcName -> func);
-        var funcExp = new FuncExpression("ifElse",
+        var funcExp = new FuncExpression("if",
                 new GeExpression(
                         new VarExpression("age"),
                         new NumberExpression("18")

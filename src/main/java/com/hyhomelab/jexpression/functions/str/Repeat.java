@@ -4,10 +4,10 @@ import com.hyhomelab.jexpression.expression.Context;
 import com.hyhomelab.jexpression.expression.nontermial.function.Func;
 import com.hyhomelab.jexpression.utils.ArgsUtils;
 
-public class StringRepeat implements Func {
+public class Repeat implements Func {
     @Override
     public String getName() {
-        return "stringRepeat";
+        return "repeat";
     }
 
     @Override
@@ -21,7 +21,7 @@ public class StringRepeat implements Func {
     public String getDescription() {
         return """
                 返回一个重复字符串填充的字符串。
-                eg. stringRepeat('abc', 3) => "abcabcabc"
+                eg. repeat('abc', 3) => "abcabcabc"
                 """;
     }
 }

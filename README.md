@@ -62,9 +62,9 @@ assertFalse(result.toBoolean());
 * 调用方法
 ```java
 
-String exp = "'abc' + stringRepeat('1', 3)";
+String exp = "'abc' + repeat('1', 3)";
 var runtime = new Runtime();
-runtime.addFunc(new StringRepeat());
+runtime.addFunc(new Repeat());
 
 var result = runtime.execute(exp);
 assertEquals("abc111", result.toString());
@@ -78,7 +78,6 @@ assertEquals("abc111", result.toString());
  // 佣金=订单金额*20%+路费
 String exp = "订单金额*0.2 + 路费";
 var runtime = new Runtime();
-runtime.addFunc(new StringRepeat());
 
 var ctx = new Context();
 ctx.setVar("订单金额", 200.1);
