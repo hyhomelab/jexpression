@@ -9,6 +9,19 @@
   <description>A simple Java expression executor</description>
   <url>https://github.com/hyhomelab/jexpression</url>
 
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>http://www.opensource.org/licenses/mit-license.php</url>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>scm:git:git://github.com/hyhomelab/jexpression.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com:hyhomelab/jexpression.git</developerConnection>
+    <url>https://github.com/hyhomelab/jexpression</url>
+  </scm>
+
   <developers>
     <developer>
       <id>hyhomelab</id>
@@ -22,6 +35,10 @@
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <maven.compiler.release>17</maven.compiler.release>
+    <encoding>UTF-8</encoding>
+    <docencoding>UTF-8</docencoding>
+    <charSet>UTF-8</charSet>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
     <dependency>
@@ -41,6 +58,83 @@
         <configuration>
           <source>17</source>
           <target>17</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.2.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9.1</version>
+        <configuration>
+          <!-- 忽略所有 Javadoc 错误 -->
+<!--          <failOnError>false</failOnError>-->
+          <additionalJOptions>
+            <!-- 添加支持的 Javadoc 标记选项 -->
+            <additionalJOption>-Xdoclint:none</additionalJOption>
+          </additionalJOptions>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>3.2.7</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <gpgArguments>
+            <arg>--pinentry-mode</arg>
+            <arg>loopback</arg>
+          </gpgArguments>
+        </configuration>
+      </plugin>
+<!--      <plugin>-->
+<!--        <groupId>net.nicoulaj.maven.plugins</groupId>-->
+<!--        <artifactId>checksum-maven-plugin</artifactId>-->
+<!--        <version>1.10</version>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <id>create-checksums</id>-->
+<!--            <goals>-->
+<!--              <goal>artifacts</goal>-->
+<!--            </goals>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--      </plugin>-->
+      <plugin>
+        <groupId>org.sonatype.central</groupId>
+        <artifactId>central-publishing-maven-plugin</artifactId>
+        <version>0.6.0</version>
+        <extensions>true</extensions>
+        <configuration>
+          <publishingServerId>central</publishingServerId>
+          <checksums>required</checksums>
         </configuration>
       </plugin>
       <plugin>
