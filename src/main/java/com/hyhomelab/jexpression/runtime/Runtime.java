@@ -83,12 +83,7 @@ public class Runtime {
 
         var rootExp = this.cache.get(expression);
         if (rootExp == null) {
-            // scan
-            var scanner = new Scanner();
-            var tokens = scanner.scan(expression);
-            // build ast
-            var ast = new Ast();
-            rootExp = ast.parse(tokens);
+            rootExp = this.compile(expression);
             // 缓存
             this.cache.put(expression, rootExp);
         }
@@ -96,5 +91,13 @@ public class Runtime {
         return rootExp.interpret(rtCtx);
     }
 
+    public Expression compile(String expression) {
+        // scan
+        var scanner = new Scanner();
+        var tokens = scanner.scan(expression);
+        // build ast
+        var ast = new Ast();
+        return ast.parse(tokens);
+    }
 
 }

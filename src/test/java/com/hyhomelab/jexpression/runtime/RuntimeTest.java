@@ -130,4 +130,13 @@ public class RuntimeTest extends TestCase {
         var result = runtime.execute(exp);
         assertTrue(result.toBoolean());
     }
+
+
+    public void testCompile() {
+        String exp = "1 in list(1,2,3)";
+        var runtime = new Runtime();
+
+        var result = runtime.compile(exp);
+        assertNotNull(result);
+    }
 }
