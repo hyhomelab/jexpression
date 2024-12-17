@@ -14,6 +14,9 @@ public class DivExpression extends Nonterminal {
     private final Expression left;
     private final Expression right;
     public DivExpression(Expression left, Expression right) {
+        if (left == null || right == null) {
+            throw new IllegalArgumentException("args cannot be null");
+        }
         this.left = left;
         this.right = right;
     }

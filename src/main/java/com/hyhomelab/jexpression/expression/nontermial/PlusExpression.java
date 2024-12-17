@@ -14,6 +14,9 @@ public class PlusExpression extends Nonterminal {
     private final Expression left;
     private final Expression right;
     public PlusExpression(Expression left, Expression right) {
+        if (left == null || right == null) {
+            throw new IllegalArgumentException("args cannot be null");
+        }
         this.left = left;
         this.right = right;
     }

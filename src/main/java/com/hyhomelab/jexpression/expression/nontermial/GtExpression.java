@@ -13,6 +13,9 @@ public class GtExpression extends Nonterminal {
     private final Expression right;
 
     public GtExpression(Expression left, Expression right) {
+        if (left == null || right == null) {
+            throw new IllegalArgumentException("args cannot be null");
+        }
         this.left = left;
         this.right = right;
     }

@@ -13,6 +13,9 @@ public class LtExpression extends Nonterminal {
     private final Expression right;
 
     public LtExpression(Expression left, Expression right) {
+        if (left == null || right == null) {
+            throw new IllegalArgumentException("args cannot be null");
+        }
         this.left = left;
         this.right = right;
     }
