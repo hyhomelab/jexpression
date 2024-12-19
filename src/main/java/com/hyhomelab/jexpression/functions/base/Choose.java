@@ -31,8 +31,8 @@ public class Choose implements Func {
     @Override
     public String getDescription() {
         return """
-                choose 方法
-                使用方法:choose(condition1, matchValue1, condition2, matchValue2,....elseValue)
+                choose(condition1, matchValue1, condition2, matchValue2,....elseValue)
+                if 方法的多分支版本，一个条件跟着一个值，只返回第一个满足条件的分支，最后一个值为所有分支都不匹配后返回的默认值
                 eg: choose(gpa==4,'A', gpa==3, 'B', gpa==2,'C', gpa==1, 'D', 'F')
                 """;
     }

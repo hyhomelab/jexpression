@@ -1,27 +1,29 @@
-package com.hyhomelab.jexpression.functions.base;
+package com.hyhomelab.jexpression.functions.math;
 
 import com.hyhomelab.jexpression.expression.Context;
 import com.hyhomelab.jexpression.expression.nontermial.function.Func;
-import com.hyhomelab.jexpression.utils.ArgsUtils;
 
-public class Not implements Func {
+/**
+ * @author hyhomelab
+ * @email hyhomelab@hotmail.com
+ * @date 2024/12/19 10:34
+ */
+public class Pi implements Func {
     @Override
     public String getName() {
-        return "not";
+        return "pi";
     }
 
     @Override
     public Object call(Context ctx, Object... args) {
-        boolean arg = ArgsUtils.getArg(ctx, args, 0).toBoolean();
-        return !arg;
+        return Math.PI;
     }
 
     @Override
     public String getDescription() {
         return """
-                not(condition)
-                对条件取反
-                eg. not(1<2) => false
+                pi()
+                数学常量 pi,返回3.14159265358979323846
                 """;
     }
 }

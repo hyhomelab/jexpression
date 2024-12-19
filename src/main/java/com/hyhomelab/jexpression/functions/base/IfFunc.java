@@ -26,8 +26,8 @@ public class IfFunc implements Func {
     @Override
     public String getDescription() {
         return """
-                if 方法
-                使用方法if(condition, trueValue, falseValue)
+                if(condition, trueValue, falseValue)
+                判断条件是否满足，满足返回 trueValue 位置的值，不满足返回 falseValue 位置的值
                 eg: if(age>=18, 'adult', 'child')
                 """;
     }

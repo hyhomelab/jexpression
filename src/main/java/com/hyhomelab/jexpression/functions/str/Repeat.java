@@ -20,6 +20,7 @@ public class Repeat implements Func {
     @Override
     public String getDescription() {
         return """
+                repeat(str, times)
                 返回一个重复字符串填充的字符串。
                 eg. repeat('abc', 3) => "abcabcabc"
                 """;

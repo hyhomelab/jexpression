@@ -36,7 +36,11 @@ public class Sum implements Func {
 
     @Override
     public String getDescription() {
-        return "累加器，使用方法sum(number1, number2....)";
+        return """
+                sum(number1, number2, ....)
+                累加
+                eg: sum(1,2,3) => 6
+                """;
     }
 
 }

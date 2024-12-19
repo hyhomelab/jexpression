@@ -33,8 +33,8 @@ public class List implements Func {
     @Override
     public String getDescription() {
         return """
+                list(arg1, arg2, arg3...)
                 构建列表
-                使用方式：list(arg1, arg2, arg3)
                 eg. list(1,2,3)
                 """;
     }

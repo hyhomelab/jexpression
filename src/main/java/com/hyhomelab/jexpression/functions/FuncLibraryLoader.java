@@ -5,7 +5,7 @@ import com.hyhomelab.jexpression.functions.base.Choose;
 import com.hyhomelab.jexpression.functions.base.IfFunc;
 import com.hyhomelab.jexpression.functions.base.Not;
 import com.hyhomelab.jexpression.functions.list.List;
-import com.hyhomelab.jexpression.functions.math.Sum;
+import com.hyhomelab.jexpression.functions.math.*;
 import com.hyhomelab.jexpression.functions.str.Repeat;
 
 /**
@@ -25,7 +25,7 @@ public class FuncLibraryLoader {
     }
 
     public static Library loadBase(){
-        var lib = new Library("base");
+        var lib = new Library("基本");
         lib.loadFunction(
                 new Choose(),
                 new IfFunc(),
@@ -35,7 +35,7 @@ public class FuncLibraryLoader {
     }
 
     public static Library loadList(){
-        var lib = new Library("list");
+        var lib = new Library("集合");
         lib.loadFunction(
                 new List()
         );
@@ -43,15 +43,26 @@ public class FuncLibraryLoader {
     }
 
     public static Library loadMath(){
-        var lib = new Library("math");
+        var lib = new Library("数学");
         lib.loadFunction(
-                new Sum()
+                new Abs(),
+                new Ceil(),
+                new E(),
+                new Floor(),
+                new Pi(),
+                new Power(),
+                new Rand(),
+                new RandBetween(),
+                new Round(),
+                new Sum(),
+                new Max(),
+                new Min()
         );
         return lib;
     }
 
     public static Library loadString(){
-        var lib = new Library("string");
+        var lib = new Library("字符串");
         lib.loadFunction(
                 new Repeat()
         );

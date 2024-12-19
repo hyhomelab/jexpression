@@ -19,7 +19,7 @@ public class Runtime {
     private final List<Library> funcLibrary = new ArrayList<>();
     private final WeakCache<Expression> cache = new WeakCache<>(10);
 
-    public final static String CUSTOM_LIBRARY_NAME = "custom";
+    public final static String CUSTOM_LIBRARY_NAME = "自定义";
 
 
     public Runtime() {
@@ -78,7 +78,7 @@ public class Runtime {
                     return func;
                 }
             }
-            throw new FunctionNotFoundException(String.format("Function [%s] not found", funcName));
+            throw new FunctionNotFoundException(String.format("function [%s] not found", funcName));
         });
 
         var rootExp = this.cache.get(expression);
@@ -98,6 +98,10 @@ public class Runtime {
         // build ast
         var ast = new Ast();
         return ast.parse(tokens);
+    }
+
+    public List<Library> getFuncLibraries() {
+        return this.funcLibrary;
     }
 
 }
