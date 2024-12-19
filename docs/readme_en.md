@@ -83,3 +83,34 @@ ctx.setVar("路费", 123.2);
 var result = runtime.execute(ctx, exp);
 assertEquals(200.1*0.2+123.2, result.toDouble());
 ```
+
+### Custom Function
+* Implement the Func interface
+  * getName: Returns the name of the function, used in formulas
+  * call: Invoked by the formula, can retrieve variables from the context
+  * getDescription: Returns the description of the function (can return empty)
+* Methods instantiated via Runtime: Use addFunc to add the function to the custom library
+
+```java
+public class Abs implements Func {
+    @Override
+    public String getName() {
+        return "abs";
+    }
+
+    @Override
+    public Object call(Context ctx, Object... args) {
+        var data = ArgsUtils.getArg(ctx, args, 0).toBigDecimal();
+        return data.abs();
+    }
+
+    @Override
+    public String getDescription() {
+        return """
+                abs(number)
+                返回给定数值的绝对值
+                eg. abs(-1)
+                """;
+    }
+}
+```

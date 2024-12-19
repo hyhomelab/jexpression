@@ -4,7 +4,7 @@
   <groupId>com.hyhomelab</groupId>
   <artifactId>jexpression</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <name>jexpression</name>
   <description>A simple Java expression executor</description>
   <url>https://github.com/hyhomelab/jexpression</url>

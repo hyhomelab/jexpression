@@ -87,3 +87,35 @@ var result = runtime.execute(ctx, exp);
 assertEquals(200.1*0.2+123.2, result.toDouble());
 
 ```
+
+### 自定义函数
+* 实现 Func 接口
+  * getName 返回方法的名称，在公式中使用
+  * call 会被公式调用，可从上下文中获取变量
+  * getDescription 返回方法描述（可返回空）
+* 通过 Runtime 实例化后的方法：addFunc添加到自定义库中
+
+案例：
+```java
+public class Abs implements Func {
+    @Override
+    public String getName() {
+        return "abs";
+    }
+
+    @Override
+    public Object call(Context ctx, Object... args) {
+        var data = ArgsUtils.getArg(ctx, args, 0).toBigDecimal();
+        return data.abs();
+    }
+
+    @Override
+    public String getDescription() {
+        return """
+                abs(number)
+                返回给定数值的绝对值
+                eg. abs(-1)
+                """;
+    }
+}
+```
