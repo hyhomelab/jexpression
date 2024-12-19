@@ -2,6 +2,9 @@ package com.hyhomelab.jexpression.utils;
 
 import java.math.BigDecimal;
 
+/**
+ * 表达式执行结果类型转换器
+ */
 public class Converter {
 
     private final Object value;

@@ -1,5 +1,8 @@
 package com.hyhomelab.jexpression.token;
 
+/**
+ * Token 的类型
+ */
 public enum TokenType {
     START(0),// 起始位置
     NUMBER(1),  // 数字

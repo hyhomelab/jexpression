@@ -19,8 +19,10 @@ public class UnidentifiedStr extends AbsTransfer{
             return new Transferable(data, new TransferNext(State.OP,State.VAR));
         }else if(Helper.isComma(data)){
             return new Transferable(data, new TransferNext(State.COMMA,State.VAR));
-        }else if(Helper.isLeftBracket(data)){
+        }else if(Helper.isLeftBracket(data)) {
             return new Transferable(data, new TransferNext(State.LEFT_BRACKET, State.FUNC));
+        }else if(Helper.isRightBracket(data)){
+            return new Transferable(data, new TransferNext(State.RIGHT_BRACKET, State.VAR));
         }else if(Helper.isBlankSpace(data)){
             if (Helper.isKeyWord(ctx.getCurrentWord())) {
                 // key word

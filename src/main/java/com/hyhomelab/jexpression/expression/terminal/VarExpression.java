@@ -14,6 +14,10 @@ public class VarExpression extends Terminal {
         this.varName = varName;
     }
 
+    public String getVarName() {
+        return varName;
+    }
+
     @Override
     public Object interpret(Context ctx) {
         var data = ctx.getVar(this.varName);

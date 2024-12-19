@@ -8,7 +8,7 @@ public class Op extends AbsTransfer{
         }else if (Helper.isLeftBracket(data)){
             return new Transferable(data, State.LEFT_BRACKET);
         }else if(Helper.isAllowString(data)){
-            return new Transferable(data, State.VAR);
+            return new Transferable(data, State.UNIDENTIFIED_STR);
         }else if(Helper.isCompositeOp(data)){
             return new Transferable(data, State.OP);
         }else if(Helper.isOpMinus(data) || Helper.isNumber(data)){

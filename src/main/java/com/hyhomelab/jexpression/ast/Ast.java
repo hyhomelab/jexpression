@@ -10,6 +10,7 @@ import com.hyhomelab.jexpression.expression.terminal.VarExpression;
 import com.hyhomelab.jexpression.token.Token;
 import com.hyhomelab.jexpression.token.TokenType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +18,8 @@ import java.util.Map;
 public class Ast {
 
     private final Map<String, Integer> opLevelMap = new HashMap<>();
-    private AstStack<Token> opTokenStack = new AstStack<>(); // 符号栈
-    private AstStack<Expression> expStack = new AstStack<>(); // 表达式栈
+    private final AstStack<Token> opTokenStack = new AstStack<>(); // 符号栈
+    private final AstStack<Node> nodeStack = new AstStack<>(); // 节点栈
 
     public Ast(){
         this.initOpLevelMap();
@@ -55,58 +56,55 @@ public class Ast {
     }
 
     /**
-     * 根据 token流构建语法树
+     * 构建抽象语法树
      * @param tokens
-     * @return 根节点
+     * @return
      */
-    public Expression parse(List<Token> tokens){
+    public Node buildTree(List<Token> tokens) {
         if(tokens == null || tokens.isEmpty()){
             throw new InvalidParameterException("tokens is null or empty");
         }
 
-        /**
-         * 算法：
-         * 符号入符号栈，符号优先级比栈顶高，直接入栈，比栈顶低的，一直弹出栈构建表达式节点入栈，直到优先级大于等于栈顶，再入栈
-         */
         for(Token token : tokens){
             if(List.of(TokenType.START, TokenType.END).contains(token.tokenType())){
                 continue;
             }else if(List.of(TokenType.NUMBER, TokenType.DECIMAL, TokenType.STRING, TokenType.VAR).contains(token.tokenType())){
                 // 构建基础类型的表达式节点
-                Expression exp = this.buildBaseTypeExpression(token);
+                Node node = new Node(token);
                 // 加入表达式栈
-                this.expStack.push(exp);
+                this.nodeStack.push(node);
             }else if(TokenType.FUNC == token.tokenType()) {
                 this.opTokenStack.push(token);
             }else if(token.tokenType() == TokenType.LEFT_BRACKET) {
                 // 开辟新栈
-                this.expStack.deepStack();
+                this.nodeStack.deepStack();
                 this.opTokenStack.deepStack();
             }else if(token.tokenType() == TokenType.RIGHT_BRACKET) {
                 // 处理右括号(不加入 opStack)
                 // 构建括号里的表达式
-                buildExpression();
+                buildNode();
                 if(this.opTokenStack.isInDeep()){
                     //
                     this.opTokenStack.leaveStack();
                 }
                 if(this.opTokenStack.peek() != null){
-                     if(TokenType.FUNC == this.opTokenStack.peek().tokenType()){
+                    if(TokenType.FUNC == this.opTokenStack.peek().tokenType()){
 
-                         // 括号里是方法参数
-                         Token funcToken = this.opTokenStack.pop();
-                         // 退出方法表达式栈，提取参数
-                         List<Expression> args = expStack.leaveStack();
-                         Expression funcExp = this.buildFuncExpression(funcToken, args);
-                         this.expStack.push(funcExp);
-                         continue;
-                     }
+                        // 括号里是方法参数
+                        Token funcToken = this.opTokenStack.pop();
+                        // 退出方法表达式栈，提取参数
+                        List<Node> args = nodeStack.leaveStack();
+                        Node node = new Node(funcToken);
+                        node.addNodes(args.toArray(new Node[0]));
+                        this.nodeStack.push(node);
+                        continue;
+                    }
                 }
                 // 如果不是方法调用，就是优先级，里面只可能剩下一个节点
-                if(!this.expStack.isEmpty()){
-                    var exp = this.expStack.pop();
-                    this.expStack.leaveStack();
-                    this.expStack.push(exp);
+                if(!this.nodeStack.isEmpty()){
+                    var node = this.nodeStack.pop();
+                    this.nodeStack.leaveStack();
+                    this.nodeStack.push(node);
                 }
 
             }else if(List.of(TokenType.OP ,TokenType.KEY_WORD, TokenType.COMMA).contains(token.tokenType())){
@@ -120,10 +118,11 @@ public class Ast {
                         if(TokenType.COMMA == opToken.tokenType()){
                             break;
                         }
-                        Expression rightExp = this.expStack.pop(); // 先弹出的是运算符右边的表达式
-                        Expression leftExp = this.expStack.pop();
-                        Expression buildExp = this.buildOpExpression(opToken, leftExp, rightExp);
-                        expStack.push(buildExp);
+                        Node rightNode = this.nodeStack.pop(); // 先弹出的是运算符右边的表达式
+                        Node leftNode = this.nodeStack.pop();
+                        Node node = new Node(opToken);
+                        node.addNodes(leftNode, rightNode);
+                        nodeStack.push(node);
                     }
                     // 优先级比栈顶高的，直接入栈
                     this.opTokenStack.push(token);
@@ -133,21 +132,69 @@ public class Ast {
             }
         }
         // 检查操作栈
-        buildExpression();
+        buildNode();
         // 最后值栈里只会剩下一个根表达式
-        assert expStack.size() == 1;
-        return expStack.pop();
+        assert nodeStack.size() == 1;
+        return nodeStack.pop();
     }
 
-    private void buildExpression() {
+    /**
+     * 把语法树转换成解释器结构的表达式
+     * @param root
+     * @return
+     */
+    public Expression treeNodeToExpression(Node root){
+        // 深度遍历所有节点，构建 expression
+        Token token = root.getToken();
+        if(List.of(TokenType.NUMBER, TokenType.DECIMAL, TokenType.STRING, TokenType.VAR).contains(token.tokenType())){
+
+            // 构建基础类型的表达式节点
+            return this.buildBaseTypeExpression(token);
+        }else if(TokenType.FUNC == token.tokenType()) {
+
+            // 构建方法表达式节点
+            List<Expression> args = new ArrayList<>();
+            for(Node node : root.getChildrenNodes()){
+                var exp = this.treeNodeToExpression(node);
+                args.add(exp);
+            }
+            return this.buildFuncExpression(root.getToken(), args);
+        }else if(List.of(TokenType.OP ,TokenType.KEY_WORD).contains(token.tokenType())){
+
+            // 构建二元操作符
+            Node left = root.getChildrenNodes().get(0);
+            Node right = root.getChildrenNodes().get(1);
+            Expression leftExp = this.treeNodeToExpression(left);
+            Expression rightExp = this.treeNodeToExpression(right);
+            return this.buildOpExpression(root.getToken(), leftExp, rightExp);
+        }else{
+            throw new InvalidParameterException("token type not supported");
+        }
+    }
+
+    /**
+     * 根据 token流构建语法树
+     * @param tokens
+     * @return 根节点
+     */
+    public Expression parse(List<Token> tokens){
+        // 构建抽象语法树
+        Node root = buildTree(tokens);
+        // 翻译成解释器
+        Expression rootExp = this.treeNodeToExpression(root);
+        return rootExp;
+    }
+
+    private void buildNode() {
         while(!this.opTokenStack.isEmpty()){
             Token opToken = this.opTokenStack.pop();
             if(TokenType.OP == opToken.tokenType() || TokenType.KEY_WORD == opToken.tokenType()) {
                 // op
-                Expression rightExp = this.expStack.pop(); // 先弹出的是运算符右边的表达式
-                Expression leftExp = this.expStack.pop();
-                Expression buildExp = this.buildOpExpression(opToken, leftExp, rightExp);
-                this.expStack.push(buildExp);
+                Node rightNode = this.nodeStack.pop(); // 先弹出的是运算符右边的表达式
+                Node leftNode = this.nodeStack.pop();
+                Node node = new Node(opToken);
+                node.addNodes(leftNode, rightNode);
+                this.nodeStack.push(node);
             }else if(TokenType.COMMA == opToken.tokenType()){
                 continue;
             }else{
@@ -155,6 +202,7 @@ public class Ast {
             }
         }
     }
+
 
     private Expression buildOpExpression(Token opToken, Expression leftExp, Expression rightExp) {
         return switch (opToken.data()){

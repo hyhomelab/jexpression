@@ -2,6 +2,13 @@ package com.hyhomelab.jexpression.token;
 
 import java.util.Objects;
 
+/**
+ * 词法分析Token
+ * @param tokenType
+ * @param data
+ * @param startPos
+ * @param endPos
+ */
 public record Token(TokenType tokenType,
                     String data,
                     int startPos,
