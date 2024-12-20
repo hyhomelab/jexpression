@@ -29,7 +29,7 @@ public class ExpressionUtils {
         var root = ast.buildTree(tokens);
 
         List<Node> varNodes = findVarNodes(root);
-        return varNodes.stream().map(node -> node.getToken().data()).collect(Collectors.toList());
+        return varNodes.stream().map(node -> node.getToken().data()).distinct().collect(Collectors.toList());
     }
 
 
@@ -47,4 +47,6 @@ public class ExpressionUtils {
         }
         return varNodes;
     }
+
+
 }

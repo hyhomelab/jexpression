@@ -12,7 +12,7 @@ import java.util.List;
 public class ExpressionUtilsTest extends TestCase {
 
     public void testFindVars() {
-        String expStr = "var1+var2*func(var3)";
+        String expStr = "var1*var1+var2*func(var3)";
         List<String> vars = ExpressionUtils.findVars(expStr);
         List<String> expected = List.of("var1", "var2", "var3");
         assertEquals(expected, vars);
