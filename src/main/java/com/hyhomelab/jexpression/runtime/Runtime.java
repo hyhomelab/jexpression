@@ -26,6 +26,10 @@ public class Runtime {
         this.loadDefaultLibraries();
     }
 
+    public void cleanCache(){
+        this.cache.clean();
+    }
+
     private void loadDefaultLibraries() {
         this.loadLibrary(new Library(CUSTOM_LIBRARY_NAME));
         this.loadLibrary(FuncLibraryLoader.loadDefaultLibraries());

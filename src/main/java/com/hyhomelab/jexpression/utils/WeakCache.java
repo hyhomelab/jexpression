@@ -28,14 +28,60 @@ class TimesEntry<T>{
     }
 }
 
+class TimeoutEntry<T> extends TimesEntry<T>{
+
+    private final long timeoutMillis;
+    private final long createTimeMillis;
+
+    public TimeoutEntry(T value, long timeoutMillis) {
+        super(value);
+        this.timeoutMillis = timeoutMillis;
+        this.createTimeMillis = System.currentTimeMillis();
+    }
+
+    private boolean isTimeout(){
+        return timeoutMillis > 0 && System.currentTimeMillis() - createTimeMillis > timeoutMillis;
+    }
+
+    @Override
+    public T getValue() {
+        if(isTimeout()){
+            return null;
+        }
+        return super.getValue();
+    }
+}
+
 public class WeakCache<T> {
 
     private final int capacity;
-    private final Map<String, TimesEntry<T>> cache = new HashMap<>();
+    private final long timeoutMillis;
+    public static final long Default_Timeout_Millis = 30 * 1000;
+    private final Map<String, TimeoutEntry<T>> cache = new HashMap<>();
     private final ReadWriteLock lock =new ReentrantReadWriteLock();
+
+    public WeakCache() {
+        this.capacity = 10;
+        this.timeoutMillis = Default_Timeout_Millis;
+    }
 
     public WeakCache(int capacity){
         this.capacity = capacity;
+        this.timeoutMillis = Default_Timeout_Millis;
+    }
+
+    public WeakCache(int capacity, long timeoutMillis){
+        this.capacity = capacity;
+        this.timeoutMillis = timeoutMillis;
+    }
+
+    public void clean(){
+        try{
+            this.lock.writeLock().lock();
+            cache.clear();
+        }finally {
+            this.lock.writeLock().unlock();
+        }
     }
 
     public T get(String key) {
@@ -61,14 +107,14 @@ public class WeakCache<T> {
         try{
             lock.writeLock().lock();
             if(this.cache.containsKey(key)){
-                this.cache.put(key, new TimesEntry<>(value));
+                this.cache.put(key, new TimeoutEntry<>(value, this.timeoutMillis));
                 return;
             }
             if (this.cache.size() > this.capacity){
                 // 找到访问次数最少的数据
                 int minVisitedTimes = Integer.MAX_VALUE;
                 String minVisitedKey = "";
-                for (Map.Entry<String, TimesEntry<T>> entry : this.cache.entrySet()) {
+                for (Map.Entry<String, TimeoutEntry<T>> entry : this.cache.entrySet()) {
                     if (entry.getValue().getTimes() < minVisitedTimes) {
                         minVisitedTimes = entry.getValue().getTimes();
                         minVisitedKey = entry.getKey();
@@ -76,7 +122,7 @@ public class WeakCache<T> {
                 }
                 this.cache.remove(minVisitedKey);
             }
-            this.cache.put(key, new TimesEntry<>(value));
+            this.cache.put(key, new TimeoutEntry<>(value, this.timeoutMillis));
         }finally{
             lock.writeLock().unlock();
         }
