@@ -12,12 +12,19 @@ public class CeilTest extends TestCase {
     public void testCall() {
         Ceil ceil = new Ceil();
         var result = ceil.call(null, -1.1);
-        assertEquals(-1, result);
+        assertEquals(-1L, result);
 
         result = ceil.call(null, -0.9);
-        assertEquals(0, result);
+        assertEquals(0L, result);
 
         result = ceil.call(null, 1.1);
-        assertEquals(2, result);
+        assertEquals(2L, result);
+
+        result = ceil.call(null, 3.14, 1);
+        assertEquals(3.2, result);
+
+
+        result = ceil.call(null, 3.15, 1);
+        assertEquals(3.2, result);
     }
 }
