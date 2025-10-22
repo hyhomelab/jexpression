@@ -4,7 +4,7 @@
   <groupId>com.hyhomelab</groupId>
   <artifactId>jexpression</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.6</version>
+  <version>1.0.8</version>
   <name>jexpression</name>
   <description>A simple Java expression executor</description>
   <url>https://github.com/hyhomelab/jexpression</url>
@@ -133,7 +133,7 @@
         <version>0.6.0</version>
         <extensions>true</extensions>
         <configuration>
-          <publishingServerId>central</publishingServerId>
+          <publishingServerId>ossrh</publishingServerId>
           <checksums>required</checksums>
           <autoPublish>true</autoPublish>
         </configuration>

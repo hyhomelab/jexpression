@@ -1,6 +1,7 @@
 package com.hyhomelab.jexpression.functions;
 
 import com.hyhomelab.jexpression.expression.nontermial.function.Library;
+import com.hyhomelab.jexpression.functions.base.Between;
 import com.hyhomelab.jexpression.functions.base.Choose;
 import com.hyhomelab.jexpression.functions.base.IfFunc;
 import com.hyhomelab.jexpression.functions.base.Not;
@@ -29,7 +30,8 @@ public class FuncLibraryLoader {
         lib.loadFunction(
                 new Choose(),
                 new IfFunc(),
-                new Not()
+                new Not(),
+                new Between()
         );
         return lib;
     }
