@@ -7,6 +7,8 @@ import com.hyhomelab.jexpression.functions.base.IfFunc;
 import com.hyhomelab.jexpression.functions.base.Not;
 import com.hyhomelab.jexpression.functions.list.List;
 import com.hyhomelab.jexpression.functions.math.*;
+import com.hyhomelab.jexpression.functions.str.Find;
+import com.hyhomelab.jexpression.functions.str.FindLast;
 import com.hyhomelab.jexpression.functions.str.Repeat;
 
 /**
@@ -66,7 +68,9 @@ public class FuncLibraryLoader {
     public static Library loadString(){
         var lib = new Library("字符串");
         lib.loadFunction(
-                new Repeat()
+                new Repeat(),
+                new Find(),
+                new FindLast()
         );
         return lib;
     }
