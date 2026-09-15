@@ -1,5 +1,7 @@
 package com.hyhomelab.jexpression.utils;
 
+import com.hyhomelab.jexpression.exception.ConvertException;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +96,20 @@ public class Converter {
                     data.add((String)row);
                 }else{
                     data.add(row.toString());
+                }
+            }
+        }
+        return data;
+    }
+
+    public <T> List<T> toBeanList(Class<T> clz){
+        var data = new ArrayList<T>();
+        if(this.value instanceof List){
+            for(var row: (List<?>)this.value){
+                if(clz.isInstance(row)){
+                    data.add(clz.cast(row));
+                }else{
+                    throw new ConvertException("cant convert to %s".formatted(clz.getSimpleName()));
                 }
             }
         }

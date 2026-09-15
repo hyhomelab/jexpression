@@ -7,6 +7,7 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class RuntimeTest extends TestCase {
 
@@ -148,5 +149,26 @@ public class RuntimeTest extends TestCase {
         assertNotNull(result);
         Assert.assertEquals(3, result.toBigDecimalList().size());
 
+    }
+
+    static class ResultToBeanListRow{
+
+        public ResultToBeanListRow(Integer id, String username){
+            this.id = id;
+            this.username = username;
+        }
+        public Integer id;
+        public String username;
+    }
+    public void testResultToBeanList(){
+
+        var ctx = new RuntimeContext();
+        ctx.setVar("data", List.of(new ResultToBeanListRow(1, "11"), new ResultToBeanListRow(2, "22")));
+        String exp = "data";
+        var runtime = new Runtime();
+
+        var result = runtime.execute(ctx, exp);
+        assertNotNull(result);
+        Assert.assertEquals(2, result.toBeanList(ResultToBeanListRow.class).size());
     }
 }
