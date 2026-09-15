@@ -3,6 +3,7 @@ package com.hyhomelab.jexpression.runtime;
 import com.hyhomelab.jexpression.functions.base.IfFunc;
 import com.hyhomelab.jexpression.functions.math.Sum;
 import com.hyhomelab.jexpression.functions.str.Repeat;
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import java.math.BigDecimal;
@@ -138,5 +139,14 @@ public class RuntimeTest extends TestCase {
 
         var result = runtime.compile(exp);
         assertNotNull(result);
+    }
+    public void testListResult() {
+        String exp = "list(1,2,3)";
+        var runtime = new Runtime();
+
+        var result = runtime.execute(exp);
+        assertNotNull(result);
+        Assert.assertEquals(3, result.toBigDecimalList().size());
+
     }
 }

@@ -1,6 +1,8 @@
 package com.hyhomelab.jexpression.utils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 表达式执行结果类型转换器
@@ -62,5 +64,39 @@ public class Converter {
             return new BigDecimal(this.value.toString());
         }
         return new BigDecimal(this.value.toString());
+    }
+
+    public List<BigDecimal> toBigDecimalList(){
+        var data = new ArrayList<BigDecimal>();
+        if(this.value instanceof List){
+            for(var row : (List<?>)this.value){
+                if(row instanceof String){
+                    data.add(new BigDecimal(String.valueOf(row)));
+                }else if(row instanceof Long){
+                    data.add(BigDecimal.valueOf((Long) row));
+                }else if(row instanceof Integer){
+                    data.add(BigDecimal.valueOf((Integer) row));
+                }else if(row instanceof Double){
+                    data.add(BigDecimal.valueOf((Double) row));
+                }else{
+                    data.add((BigDecimal) row);
+                }
+            }
+        }
+        return data;
+    }
+
+    public List<String> toStringList(){
+        var data = new ArrayList<String>();
+        if(this.value instanceof List){
+            for(var row : (List<?>)this.value){
+                if(row instanceof String){
+                    data.add((String)row);
+                }else{
+                    data.add(row.toString());
+                }
+            }
+        }
+        return data;
     }
 }
