@@ -6,6 +6,7 @@ import com.hyhomelab.jexpression.functions.base.Choose;
 import com.hyhomelab.jexpression.functions.base.IfFunc;
 import com.hyhomelab.jexpression.functions.base.Not;
 import com.hyhomelab.jexpression.functions.list.List;
+import com.hyhomelab.jexpression.functions.list.Set;
 import com.hyhomelab.jexpression.functions.math.*;
 import com.hyhomelab.jexpression.functions.str.Find;
 import com.hyhomelab.jexpression.functions.str.FindLast;
@@ -41,7 +42,8 @@ public class FuncLibraryLoader {
     public static Library loadList(){
         var lib = new Library("集合");
         lib.loadFunction(
-                new List()
+                new List(),
+                new Set()
         );
         return lib;
     }

@@ -151,6 +151,45 @@ public class RuntimeTest extends TestCase {
 
     }
 
+
+    static class Bean{
+
+        public String name;
+
+        public Bean(String name) {
+            this.name = name;
+        }
+        @Override
+        public boolean equals(Object obj) {
+            return name.equals(((Bean)obj).name);
+        }
+
+        @Override
+        public int hashCode() {
+            return name.hashCode();
+        }
+    }
+    public void testSetResult() {
+
+        String exp = "set(1,2,3,1)";
+        var runtime = new Runtime();
+
+        var result = runtime.execute(exp);
+        assertNotNull(result);
+        Assert.assertEquals(3, result.toBigDecimalList().size());
+
+        // 测试对象 set
+        exp = "set(a, b)";
+        runtime = new Runtime();
+        var ctx = new RuntimeContext();
+
+        ctx.setVar("a", List.of(new Bean("a"), new Bean("b")));
+        ctx.setVar("b", new Bean("b"));
+        result = runtime.execute(ctx, exp);
+        Assert.assertEquals(2, result.toBeanList(Bean.class).size());
+
+    }
+
     static class ResultToBeanListRow{
 
         public ResultToBeanListRow(Integer id, String username){

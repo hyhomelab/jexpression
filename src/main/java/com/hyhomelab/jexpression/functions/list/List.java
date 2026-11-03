@@ -6,6 +6,7 @@ import com.hyhomelab.jexpression.expression.nontermial.function.Func;
 import com.hyhomelab.jexpression.utils.ArgsUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * @author hyhomelab
@@ -25,7 +26,13 @@ public class List implements Func {
         }
         var Objects = new ArrayList<Object>();
         for (var i=0; i<args.length; i++) {
-            Objects.add(ArgsUtils.getArg(ctx, args, i).getValue());
+            var arg = ArgsUtils.getArg(ctx, args, i).getValue();
+            if(arg instanceof Collection<?> collection){
+                Objects.addAll(collection);
+            }else{
+                Objects.add(arg);
+            }
+
         }
         return Objects;
     }
