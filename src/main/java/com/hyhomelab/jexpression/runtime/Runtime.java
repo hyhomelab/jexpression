@@ -8,6 +8,8 @@ import com.hyhomelab.jexpression.expression.nontermial.function.Func;
 import com.hyhomelab.jexpression.expression.nontermial.function.Library;
 import com.hyhomelab.jexpression.functions.FuncLibraryLoader;
 import com.hyhomelab.jexpression.scanner.Scanner;
+import com.hyhomelab.jexpression.token.Token;
+import com.hyhomelab.jexpression.token.TokenType;
 import com.hyhomelab.jexpression.utils.WeakCache;
 
 import java.util.ArrayList;
@@ -76,13 +78,11 @@ public class Runtime {
         // 加载方法
         var rtCtx = new RuntimeContext(ctx);
         rtCtx.setFuncFinder(funcName -> {
-            for (Library library : funcLibrary) {
-                var func = library.getFunction(funcName);
-                if (func != null) {
-                    return func;
-                }
+            var func = this.findFunc(funcName);
+            if (func == null) {
+                throw new FunctionNotFoundException(String.format("function [%s] not found", funcName));
             }
-            throw new FunctionNotFoundException(String.format("function [%s] not found", funcName));
+            return func;
         });
 
         var rootExp = this.cache.get(expression);
@@ -99,9 +99,29 @@ public class Runtime {
         // scan
         var scanner = new Scanner();
         var tokens = scanner.scan(expression);
+        // 检查方法是否存在
+        this.checkFunctions(tokens);
         // build ast
         var ast = new Ast();
         return ast.parse(tokens);
+    }
+
+    private void checkFunctions(List<Token> tokens) {
+        for (Token token : tokens) {
+            if (token.tokenType() == TokenType.FUNC && this.findFunc(token.data()) == null) {
+                throw new FunctionNotFoundException(String.format("function [%s] not found", token.data()));
+            }
+        }
+    }
+
+    private Func findFunc(String funcName) {
+        for (Library library : funcLibrary) {
+            var func = library.getFunction(funcName);
+            if (func != null) {
+                return func;
+            }
+        }
+        return null;
     }
 
     public List<Library> getFuncLibraries() {

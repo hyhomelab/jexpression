@@ -1,5 +1,6 @@
 package com.hyhomelab.jexpression.runtime;
 
+import com.hyhomelab.jexpression.exception.FunctionNotFoundException;
 import com.hyhomelab.jexpression.functions.base.IfFunc;
 import com.hyhomelab.jexpression.functions.math.Sum;
 import com.hyhomelab.jexpression.functions.str.Repeat;
@@ -141,6 +142,27 @@ public class RuntimeTest extends TestCase {
         var result = runtime.compile(exp);
         assertNotNull(result);
     }
+
+    public void testCompileFuncNotExist() {
+        String exp = "notExistFunc(1,2)";
+        var runtime = new Runtime();
+
+        try {
+            runtime.compile(exp);
+            fail("should throw FunctionNotFoundException");
+        } catch (FunctionNotFoundException e) {
+            assertTrue(e.getMessage().contains("notExistFunc"));
+        }
+    }
+
+    public void testCompileCustomFunc() {
+        String exp = "repeat('a', 3)";
+        var runtime = new Runtime();
+        assertNotNull(runtime.compile(exp));
+
+        runtime.addFunc(new Repeat());
+        assertNotNull(runtime.compile(exp));
+    }
     public void testListResult() {
         String exp = "list(1,2,3)";
         var runtime = new Runtime();
@@ -179,12 +201,13 @@ public class RuntimeTest extends TestCase {
         Assert.assertEquals(3, result.toBigDecimalList().size());
 
         // 测试对象 set
-        exp = "set(a, b)";
+        exp = "set(a, b, c)";
         runtime = new Runtime();
         var ctx = new RuntimeContext();
 
         ctx.setVar("a", List.of(new Bean("a"), new Bean("b")));
         ctx.setVar("b", new Bean("b"));
+        ctx.setVar("c", List.of());
         result = runtime.execute(ctx, exp);
         Assert.assertEquals(2, result.toBeanList(Bean.class).size());
 
